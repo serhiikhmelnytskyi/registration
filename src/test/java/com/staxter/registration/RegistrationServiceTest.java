@@ -35,9 +35,8 @@ public class RegistrationServiceTest {
     }
     @Test
     public void tesCreatedUser()  {
-        User  user = new User("testFirstName","testLastName","testUserName");
-        String password = "password";
-        ResponseEntity responseEntityR  = userService .createUser(user,password);
+        User  user = new User("testFirstName","testLastName","testUserName","password");
+        ResponseEntity responseEntityR = userService.createUser(user);
         assertThat(responseEntityR.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         User userR = (User)responseEntityR.getBody();
         assertThat(userR.getFirstName()).isEqualTo("testFirstName");
@@ -49,10 +48,9 @@ public class RegistrationServiceTest {
 
     @Test
     public void tesAlreadyExistUser()  {
-        User  user = new User("testFirstName","testLastName","testUserName");
-        String password = "password";
-        userService .createUser(user,password);
-        ResponseEntity responseEntityR  = userService .createUser(user,password);
+        User  user = new User("testFirstName","testLastName","testUserName","password");
+        userService .createUser(user);
+        ResponseEntity responseEntityR  = userService .createUser(user);
         assertThat(responseEntityR.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
         ErrorResponse  errorResponse = (ErrorResponse) responseEntityR.getBody();
         assertThat(errorResponse.getCode()).isEqualTo(CodeEnumeration.USER_ALREADY_EXISTS.name());

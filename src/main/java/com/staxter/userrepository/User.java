@@ -1,6 +1,9 @@
 package com.staxter.userrepository;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import java.io.Serializable;
 
@@ -12,7 +15,9 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
     private String userName;
-
+    private transient String plainTextPassword;
+    @JsonIgnore
+    private String hashedPassword;
     public User() {
         super();
     }
@@ -23,22 +28,16 @@ public class User implements Serializable {
         this.userName = userName;
     }
 
-    public User(String id, String firstName, String lastName, String userName) {
+
+    public User( String firstName, String lastName, String userName, String plainTextPassword) {
         this(firstName,lastName,userName);
-        this.id = id;
-
-    }
-
-    public User(String id, String firstName, String lastName, String userName, String plainTextPassword, String hashedPassword) {
-        this(id,firstName,lastName,userName);
         this.plainTextPassword = plainTextPassword;
-        this.hashedPassword = hashedPassword;
+    }
+    public User( String id, String firstName, String lastName, String userName, String plainTextPassword) {
+        this(firstName,lastName,userName);
+        this.plainTextPassword = plainTextPassword;
     }
 
-    @JsonIgnore
-    private String plainTextPassword;
-    @JsonIgnore
-    private String hashedPassword;
 
     public String getId() {
         return id;
@@ -71,11 +70,11 @@ public class User implements Serializable {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
+    @JsonIgnore
     public String getPlainTextPassword() {
         return plainTextPassword;
     }
-
+    @JsonSetter("password")
     public void setPlainTextPassword(String plainTextPassword) {
         this.plainTextPassword = plainTextPassword;
     }

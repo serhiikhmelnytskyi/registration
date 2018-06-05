@@ -4,6 +4,7 @@ import com.staxter.enums.CodeEnumeration;
 import com.staxter.error.ErrorResponse;
 import com.staxter.error.ErrorService;
 import com.staxter.exceptions.authorisation.UserAlreadyExistsException;
+import com.staxter.validation.UserRegistrationValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,17 +30,16 @@ public class UserServiceImpl implements UserService {
      * create user
      *
      * @param user
-     * @param password
      * @return
      */
     @Override
-    public ResponseEntity<?> createUser(User user, String password) {
-        Optional<ResponseEntity<?>>  optionalError = errorService.registrationPasswordError(password);
-        if(optionalError.isPresent()){
-            return optionalError.get();
+    public ResponseEntity<?> createUser(User user) {
+        Optional<ResponseEntity<?>>  errorResponse =  errorService.registrationValidationError(user);
+        if(errorResponse.isPresent()){
+            return errorResponse.get();
         }
         try {
-            this.hashedPassword(user, password);
+            this.hashedPassword(user);
             this.generateUserId(user);
             userRepository.createUser(user);
         } catch (UserAlreadyExistsException ex) {
@@ -51,16 +51,13 @@ public class UserServiceImpl implements UserService {
 
     /**
      * hashed  user password
-     *
-     * @param user
-     * @param password
+
      */
-    public void hashedPassword(User user, String password) {
-        if (user == null || password == null) {
+    public void hashedPassword(User user) {
+        if (user == null ) {
             return;
         }
-        user.setHashedPassword(passwordEncoder.encode(password));
-        user.setPlainTextPassword(password);
+        user.setHashedPassword(passwordEncoder.encode(user.getPlainTextPassword()));
     }
 
     /**

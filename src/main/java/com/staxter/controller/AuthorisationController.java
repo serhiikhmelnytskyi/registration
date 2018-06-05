@@ -1,16 +1,17 @@
 package com.staxter.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.staxter.error.ErrorService;
 import com.staxter.userrepository.User;
 import com.staxter.userrepository.UserService;
-import com.staxter.validation.UserRegistrationValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import java.util.Map;
 
 
 /**
@@ -22,24 +23,12 @@ public class AuthorisationController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private ErrorService errorService;
-    @Autowired
-    private UserRegistrationValidator userRegistrationValidator;
-
-    @InitBinder("userRegistration")
-    public void initBinderUserRegistration(WebDataBinder binder) {
-        binder.addValidators(userRegistrationValidator);
-    }
 
     @RequestMapping(value = "/userservice/register", method = RequestMethod.PUT)
-    public ResponseEntity<?> registration(@RequestParam(value = "password", required = true) String password,
-                                          @ModelAttribute("userRegistration") @Valid User user, BindingResult bindingResult) {
-        if (!bindingResult.hasErrors()) {
-            return userService.createUser(user, password);
-        } else {
-            return errorService.registrationValidationError(bindingResult);
-        }
+    public ResponseEntity<?> registration(@RequestParam Map<String, String> params) {
+        ObjectMapper mapper = new ObjectMapper();
+        User user = mapper.convertValue(params, User.class);
+        return userService.createUser(user);
 
     }
 

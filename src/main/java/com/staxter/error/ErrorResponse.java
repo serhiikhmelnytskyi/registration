@@ -6,8 +6,8 @@ import java.io.Serializable;
  * Created by serge on 6/5/2018.
  */
 public class ErrorResponse implements Serializable {
-    public String code;
-    public String description;
+    private String code;
+    private  String description;
 
     public ErrorResponse() {
         super();

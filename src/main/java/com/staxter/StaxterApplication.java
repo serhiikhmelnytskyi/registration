@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class StaxterApplication {
@@ -13,12 +14,6 @@ public class StaxterApplication {
         SpringApplication.run(StaxterApplication.class, args);
     }
 
-    //	@Bean
-//	public MessageSource messageSource() {
-//		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-//		messageSource.setBasename("/messages/messages");
-//		return messageSource;
-//	}
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new StandardPasswordEncoder();

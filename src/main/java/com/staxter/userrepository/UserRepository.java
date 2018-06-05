@@ -9,5 +9,5 @@ import java.util.Optional;
  */
 public interface UserRepository {
     Optional<User> createUser(User user) throws UserAlreadyExistsException;
-
+    void cleanUserList();
 }

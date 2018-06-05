@@ -32,4 +32,8 @@ public class UserRepositoryImpl implements UserRepository {
         }
         return Optional.empty();
     }
+
+    public  void cleanUserList(){
+        userList.clear();
+    }
 }

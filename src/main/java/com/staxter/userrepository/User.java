@@ -12,6 +12,29 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
     private String userName;
+
+    public User() {
+        super();
+    }
+
+    public User(String firstName, String lastName, String userName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+    }
+
+    public User(String id, String firstName, String lastName, String userName) {
+        this(firstName,lastName,userName);
+        this.id = id;
+
+    }
+
+    public User(String id, String firstName, String lastName, String userName, String plainTextPassword, String hashedPassword) {
+        this(id,firstName,lastName,userName);
+        this.plainTextPassword = plainTextPassword;
+        this.hashedPassword = hashedPassword;
+    }
+
     @JsonIgnore
     private String plainTextPassword;
     @JsonIgnore
